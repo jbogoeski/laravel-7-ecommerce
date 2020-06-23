@@ -19,11 +19,31 @@ class ProductController extends Controller
     }
 
     public function create() {
-        return "Create form from controller";
+
+
+
+        return view('products.create');
+
     }
 
     public function store() {
-        //
+        
+        // dd(request(), request()->title, request()->all());
+        // $product = Product::create([
+        //     'title' => request()->title,
+        //     'description' => request()->description,
+        //     'price' => request()->price,
+        //     'stock' => request()->stock, 
+        //     'status' => request()->status,
+        // ]);
+
+        $product = Product::create(request()->all());
+
+        return $product;
+
+
+
+
     }
 
     public function show($product) {
@@ -37,14 +57,40 @@ class ProductController extends Controller
     }
 
     public function edit($product) {
-        return "showing form to edit {$product} from controller";
+
+        $product = Product::findOrFail($product);
+
+
+        return view('products.edit')->with([
+            'product' => $product,
+        ]);
+
     }
 
     public function update($product) {
-        return "showing form to update {$product} from controller";
+
+        $product = Product::findOrFail($product);
+
+        $product->update(request()->all());
+
+        return //redirect;
+
+        redirect()->back(); //
+        redirect()->route('products.index');//
+        redirect()->action('ProductController@index');//
+
     }
 
     public function destroy($product) {
+
+        $product = Product::findOrFail($product);
+
+        $product->delete();
+
+
+        return $product;
+        
+
 
     }
 }
