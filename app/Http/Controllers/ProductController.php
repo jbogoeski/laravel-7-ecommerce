@@ -5,9 +5,20 @@ namespace App\Http\Controllers;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
+
+        /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     public function index() {
 
@@ -26,30 +37,19 @@ class ProductController extends Controller
 
     }
 
-    public function store() {
+    public function store(ProductRequest $request) {
         
-        // dd(request(), request()->title, request()->all());
-        // $product = Product::create([
-        //     'title' => request()->title,
-        //     'description' => request()->description,
-        //     'price' => request()->price,
-        //     'stock' => request()->stock, 
-        //     'status' => request()->status,
-        // ]);
 
-        $product = Product::create(request()->all());
+        
+        $product = Product::create($request->validated());
 
-        return $product;
-
-
-
+        return redirect()
+        ->route('products.index')
+        ->withSuccess("New product with id {$product->id} was created");
 
     }
 
-    public function show($product) {
-
-
-        $product = Product::findOrFail($product);
+    public function show(Product $product) {
 
         return view('products.show')->with([
             'product' => $product,
@@ -67,28 +67,33 @@ class ProductController extends Controller
 
     }
 
-    public function update($product) {
+    public function update(ProductRequest $request, Product $product) {
 
-        $product = Product::findOrFail($product);
+        // $product = Product::findOrFail($product);
 
-        $product->update(request()->all());
+        $product->update($request->all());
 
-        return //redirect;
+        return redirect()
+        ->route('products.index')
+        ->withSuccess("The product with id {$product->id} was updated");
 
-        redirect()->back(); //
-        redirect()->route('products.index');//
-        redirect()->action('ProductController@index');//
+        // redirect()->back(); 
+        // redirect()->action('ProductController@index');
 
     }
 
-    public function destroy($product) {
+    public function destroy(Product $product) {
 
-        $product = Product::findOrFail($product);
+        // $product = Product::findOrFail($product);
 
         $product->delete();
 
 
-        return $product;
+        return redirect()
+        ->route('products.index')
+        ->withSuccess("New product with id {$product->id} was deleted");
+
+;
         
 
 
