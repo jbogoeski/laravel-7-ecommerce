@@ -7,6 +7,8 @@ use Faker\Generator as Faker;
 
 $factory->define(Order::class, function (Faker $faker) {
     return [
-        //
+        'status' => $faker->randomElement(['pending', 'paid', 'shipped']),
+        //coustimer_id no needed
+
     ];
 });
