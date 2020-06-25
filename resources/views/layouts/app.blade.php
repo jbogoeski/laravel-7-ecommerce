@@ -82,6 +82,9 @@
 
         <main class="py-4">
             <div class="container-fluid">
+
+
+
                 @if(isset($errors) && $errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -97,6 +100,12 @@
                         {{ session()->get('success') }}
                     </div>
                 @endif
+
+                @if (session()->has('success'))
+                    <h1>{{ session('success') }}</h1>
+                @endif
+
+
 
                 @yield('content')
             </div>
